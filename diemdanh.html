@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Điểm Danh Lớp CNTT 47</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    button { margin-top: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+
+<h2>Điểm Danh - Lớp Công Nghệ Thông Tin 47</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>STT</th>
+      <th>Họ và tên</th>
+      <th>Có mặt</th>
+    </tr>
+  </thead>
+  <tbody id="studentList">
+    <!-- Dữ liệu sinh viên sẽ được chèn ở đây -->
+  </tbody>
+</table>
+
+<button onclick="exportToWord()">Báo Cáo</button>
+
+<script>
+const students = [
+  "Dương Thị Lan Anh", "Nguyễn Thành Bắc", "Nguyễn Chi Bảo", "Dương Cao Cờ", "Bùi Bá Đạt",
+  "Tạ Phát Đạt", "Nguyễn A Đình", "Lâm Nhựt Huỳnh", "Nguyễn Trần Ngọc Hỷ", "Bùi Minh Khánh",
+  "Ngô Võ Quốc Khánh", "Nguyễn Thành Khoa", "Dương Minh Khôi", "Trương Quốc Kiệt",
+  "Trần Vĩnh Phúc", "Nguyễn Hồ Vĩnh Phước", "Nguyễn Huỳnh Hải Phương", "Nguyễn Thị Kim Quyên",
+  "Đoàn Văn Sơn", "Võ Thị Thu Thảo", "Lê Phan Minh Thư", "Lê Nguyễn Ngọc Trâm",
+  "Nguyễn Quốc Vỹ", "Nguyễn Thị Yến"
+];
+
+const tbody = document.getElementById("studentList");
+
+students.forEach((name, index) => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${index + 1}</td>
+    <td>${name}</td>
+    <td><input type="checkbox" id="student${index}"></td>
+  `;
+  tbody.appendChild(row);
+});
+
+function exportToWord() {
+  let present = "";
+  let absent = "";
+
+  students.forEach((name, index) => {
+    const checkbox = document.getElementById(`student${index}`);
+    if (checkbox.checked) {
+      present += `${index + 1}. ${name}\n`;
+    } else {
+      absent += `${index + 1}. ${name}\n`;
+    }
+  });
+
+  const reportContent = `
+    <h2>Danh sách điểm danh - Lớp CNTT 47</h2>
+    <p><strong>Có mặt:</strong></p>
+    <pre>${present}</pre>
+    <p><strong>Vắng:</strong></p>
+    <pre>${absent}</pre>
+  `;
+
+  const blob = new Blob(['<html><head><meta charset="utf-8"></head><body>' + reportContent + '</body></html>'], {
+    type: "application/msword"
+  });
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "BaoCaoDiemDanh.doc";
+  link.click();
+}
+</script>
+
+</body>
+</html>
